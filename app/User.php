@@ -72,14 +72,25 @@ class User extends Authenticatable
         return false;
     }
 
-    /**
-     * An user has many roles
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
+
     public function role()
     {
         return $this->belongsTo('App\Role');
+    }
+
+    public function vaults()
+    {
+        return $this->hasMany('App\Vault');
+    }
+
+    public function documents()
+    {
+        return $this->hasMany('App\Document');
+    }
+
+    public function public_vaults()
+    {
+        return $this->belongsToMany('App\Vault', 'vault_pivot', 'user_id', 'vault_id')->withTimestamps();
     }
 
 

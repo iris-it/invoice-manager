@@ -23,8 +23,33 @@ Route::group(['middleware' => 'auth'], function () {
 
 
     /*
-   * Admin Group
-   */
+    * Admin Group
+    */
+    Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function () {
+
+        /*
+         * Vault resources
+         */
+        Route::get('vaults', 'VaultController@index');
+        Route::get('vaults/create', 'VaultController@create');
+        Route::post('vaults', 'VaultController@store');
+        Route::get('vaults/{id}', 'VaultController@show');
+        Route::get('vaults/{id}/edit', 'VaultController@edit');
+        Route::put('vaults/{id}', 'VaultController@update');
+        Route::delete('vaults/{id}', 'VaultController@destroy');
+
+        /*
+         * Documents resources
+         */
+        Route::get('documents', 'DocumentController@index');
+        Route::get('documents/{id}', 'DocumentController@show');
+        Route::delete('documents/{id}', 'VaultController@destroy');
+
+    });
+
+    /*
+    * Admin Group
+    */
     Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function () {
 
         /*
