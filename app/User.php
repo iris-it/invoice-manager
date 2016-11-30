@@ -90,7 +90,7 @@ class User extends Authenticatable
 
     public function public_vaults()
     {
-        return $this->belongsToMany('App\Vault', 'vault_pivot', 'user_id', 'vault_id')->withTimestamps();
+        return $this->belongsToMany('App\Vault', 'vault_pivot', 'user_id', 'vault_id')->withPivot('is_valid')->withTimestamps();
     }
 
 

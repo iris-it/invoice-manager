@@ -40,8 +40,8 @@ class VaultRequest extends Request
         $rules = [
             'name' => 'required|max:100',
             'description' => 'required|max:300',
-            'email' => 'required',
-            'files' => 'required'
+            'emails.*' => 'required|email',
+            'files.*.file' => 'max:20240'
         ];
 
         return $rules;

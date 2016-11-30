@@ -30,17 +30,6 @@
 
                                 <div class="form-group">
                                     <div class="col-md-12 col-xs-12">
-                                        <label>{{trans('vault.users-field')}}</label>
-                                        <ul>
-                                            @foreach($vault->users as $user)
-                                                <li><b>{{($vault->users()->where('user_id', $user->id)->first()->pivot->is_valid)?trans('general.yes'):trans('general.no')}}</b> : {{$user->name}} ({{$user->email}})</li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <div class="col-md-12 col-xs-12">
                                         <label>{{trans('vault.documents-field')}}</label>
                                         <ul>
                                             @foreach($vault->documents as $document)
@@ -50,16 +39,30 @@
                                     </div>
                                 </div>
 
+                                {!! Form::open(['method' => 'POST','action' => ['VaultController@validateToggle',$vault->id]]) !!}
+
+                                <div class="form-group">
+                                    <div class="col-md-12 col-xs-12">
+                                        <div class="checkbox">
+                                            <label>
+                                                {!! Form::checkbox('status', true ,$status) !!} {{trans('vault.validate-field')}}
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="box-footer">
+                                    <a href="{{action('VaultController@index')}}" class="btn btn-flat btn-sm btn-info" type="button">
+                                        <i class="fa fa-arrow-left"></i> {{trans('vault.back-action')}}
+                                    </a>
+                                    <button class="btn btn-flat btn-sm btn-primary" type="submit">
+                                        <i class="fa fa-check push-5-r"></i> {{trans('vault.validate-action')}}
+                                    </button>
+                                </div>
+
+                                {!! Form::close() !!}
                             </div>
                         </div>
-                    </div>
-                    <div class="box-footer">
-                        <a href="{{action('Manager\VaultController@index')}}" class="btn btn-flat btn-sm btn-info" type="button">
-                            <i class="fa fa-arrow-left"></i> {{trans('vault.back-action')}}
-                        </a>
-                        <a href="{{action('Manager\VaultController@edit', $vault->id)}}" class="btn btn-flat btn-sm btn-success" type="button">
-                            <i class="fa fa-pencil"></i> {{trans('vault.edit-action')}}
-                        </a>
                     </div>
                 </div>
             </div>

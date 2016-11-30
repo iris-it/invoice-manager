@@ -3,9 +3,15 @@
 namespace App\Http\Controllers\Manager;
 
 use App\Http\Requests\Manager\VaultRequest;
+use App\Jobs\SendVaultLinkByEmail;
+use App\Services\ProcessEmails;
+use App\Services\ProcessFiles;
 use App\Vault;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Storage;
+use Laracasts\Flash\Flash;
 
 class VaultController extends Controller
 {
@@ -33,47 +39,132 @@ class VaultController extends Controller
      * Store a newly created resource in storage.
      *
      * @param VaultRequest $request
+     * @param ProcessEmails $processEmails
+     * @param ProcessFiles $processFiles
      * @return \Illuminate\Http\Response
      */
-    public function store(VaultRequest $request)
+    public function store(VaultRequest $request, ProcessEmails $processEmails, ProcessFiles $processFiles)
     {
         $data = $request->all();
 
-        $user = User::create($data);
+        /*
+         * Create Vault
+         */
+        $vault = Vault::create([
+            'name' => $data['name'],
+            'description' => $data['description'],
+            'user_id' => $request->user()->id,
+        ]);
+
+        /*
+         * Create or get users and attach them to vault
+         */
+        $users = $processEmails->initialize($data['emails'])->processUsers();
+        $vault->users()->sync($users->pluck('id')->all());
+
+        /*
+         * Store files to vault
+         */
+        $files = $processFiles->initialize($request->file('files'), $vault)->processFiles();
+        foreach ($files as $file) {
+            $file->vault()->associate($vault);
+            $file->owner()->associate($request->user());
+            $file->save();
+        }
+
+        /*
+         * Return Success or not
+         */
+        if ($vault->save()) {
+
+            /*
+             * Dispatch by mail
+             */
+            foreach ($users as $user) {
+                $this->dispatch(new SendVaultLinkByEmail($user, $vault));
+            }
+
+            Flash::success(Lang::get('vault.create-success'));
+            return redirect(action('Manager\VaultController@index'));
+        } else {
+            Flash::error(Lang::get('vault.create-failed'));
+            return redirect(back());
+        }
+
     }
 
     /**
      * Display the specified resource.
      *
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function show($id)
     {
-        //
+        $vault = Vault::findOrFail($id);
+
+        return view('pages.manager.vault.show')->with(compact('vault'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function edit($id)
     {
-        //
+        $vault = Vault::findOrFail($id);
+
+        $emails = $vault->users->reduce(function ($carry, $item) {
+            if (!$carry) return $item->email;
+            return $carry . ',' . $item->email;
+        });
+
+        return view('pages.manager.vault.edit')->with(compact('vault', 'emails'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param VaultRequest|Request $request
      * @param  int $id
+     * @param ProcessEmails $processEmails
+     * @param ProcessFiles $processFiles
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(VaultRequest $request, $id, ProcessEmails $processEmails, ProcessFiles $processFiles)
     {
-        //
+        $vault = Vault::findOrFail($id);
+
+        $data = $request->all();
+
+        /*
+         * update Vault
+         */
+        $vault->update([
+            'name' => $data['name'],
+            'description' => $data['description']
+        ]);
+
+        /*
+         * Create or get users and attach them to vault
+         */
+        $users = $processEmails->initialize($data['emails'])->processUsers();
+        $vault->users()->sync($users->pluck('id')->all());
+
+
+        if ($request->hasFile('files')) {
+            $files = $processFiles->initialize($request->file('files'), $vault)->processFiles();
+            foreach ($files as $file) {
+                $file->vault()->associate($vault);
+                $file->owner()->associate($request->user());
+                $file->save();
+            }
+        }
+
+        Flash::success(Lang::get('vault.update-success'));
+        return redirect(action('Manager\VaultController@edit', $id));
     }
 
     /**
@@ -84,6 +175,22 @@ class VaultController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $vault = Vault::findOrFail($id);
+
+        $disk = Storage::disk('uploads');
+
+        foreach ($vault->documents as $document) {
+            $disk->delete($document->path);
+            $document->delete();
+        }
+
+        $disk->deleteDirectory($vault->id . str_slug($vault->name));
+
+        $vault->delete();
+
+        Flash::success(Lang::get('vault.delete-success'));
+
+        return redirect(action('Manager\VaultController@index'));
+
     }
 }

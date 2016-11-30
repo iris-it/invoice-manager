@@ -17,17 +17,18 @@ class Vault extends Model
     protected $fillable = [
         'name',
         'description',
+        'user_id',
     ];
 
 
     public function owner()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\User', 'user_id');
     }
 
     public function users()
     {
-        return $this->belongsToMany('App\User', 'vault_pivot', 'vault_id', 'user_id')->withTimestamps();
+        return $this->belongsToMany('App\User', 'vault_pivot', 'vault_id', 'user_id')->withPivot('is_valid')->withTimestamps();
     }
 
     public function documents()

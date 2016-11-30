@@ -17,6 +17,7 @@ class CreateDocumentsTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('path');
+            $table->string('uuid');
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ class CreateDocumentsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('vaults');
+        Schema::drop('documents');
     }
 }

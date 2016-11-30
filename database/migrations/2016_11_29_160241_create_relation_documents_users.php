@@ -14,7 +14,7 @@ class CreateRelationDocumentsUsers extends Migration
     {
 
         Schema::table('documents', function ($table) {
-            $table->integer('user_id')->unsigned()->nullable()->default(3)->index();
+            $table->integer('user_id')->unsigned()->nullable()->index();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
         });
     }

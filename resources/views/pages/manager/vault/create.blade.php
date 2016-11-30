@@ -7,7 +7,7 @@
             <div class="col-xs-12">
                 <div class="box">
 
-                    {!! Form::open(['method' => 'POST','action' => ['Manager\VaultController@store']]) !!}
+                    {!! Form::open(['method' => 'POST','action' => ['Manager\VaultController@store'], 'files' => true]) !!}
 
                     <div class="box-header">
                         <h3 class="box-title">{{trans('vault.new-title')}}</h3>
@@ -32,11 +32,11 @@
                                     </div>
                                     <div class="col-md-6">
                                         <label for="email">{{trans('vault.emails-field')}}<span class="text-danger animated flash"> *</span></label>
-                                        {!! Form::text('emails', null, ['class' => 'form-control']) !!}
+                                        {!! Form::email('emails', null, ['class' => 'form-control', 'autocomplete' => 'on', 'required', 'multiple']) !!}
                                     </div>
                                     <div class="col-md-6">
                                         <label for="email">{{trans('vault.files-field')}}<span class="text-danger animated flash"> *</span></label>
-                                        {!! Form::file('files[]',['class' => 'form-control','multiple' => 'true']) !!}
+                                        {!! Form::file('files[]',['class' => 'form-control', 'multiple' => 'true']) !!}
                                     </div>
                                 </div>
                             </div>

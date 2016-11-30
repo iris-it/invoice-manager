@@ -11,6 +11,7 @@
 |
 */
 
+
 Route::get('/', function () {
     return redirect(action('HomeController@index'));
 });
@@ -19,11 +20,27 @@ Auth::routes();
 
 Route::group(['middleware' => 'auth'], function () {
 
+
     Route::get('/home', 'HomeController@index');
 
+    Route::get('/serve/{uuid}', function ($uuid) {
+        $document = App\Document::where('uuid', $uuid)->get()->first();
+        return response()->download(storage_path(
+            'app' . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . $document->path
+        ));
+    });
 
     /*
-    * Admin Group
+    * User Group
+    */
+    Route::group(['prefix' => 'user'], function () {
+        Route::get('vaults', 'VaultController@index');
+        Route::get('vaults/{id}', 'VaultController@show');
+        Route::post('vaults/{id}/validate/toggle', 'VaultController@validateToggle');
+    });
+
+    /*
+    * Manager Group
     */
     Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function () {
 
@@ -42,8 +59,7 @@ Route::group(['middleware' => 'auth'], function () {
          * Documents resources
          */
         Route::get('documents', 'DocumentController@index');
-        Route::get('documents/{id}', 'DocumentController@show');
-        Route::delete('documents/{id}', 'VaultController@destroy');
+        Route::delete('documents/{id}', 'DocumentController@destroy');
 
     });
 

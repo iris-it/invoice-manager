@@ -48,6 +48,11 @@ return [
             'root' => storage_path('app'),
         ],
 
+        'uploads' => [
+            'driver' => 'local',
+            'root' => storage_path('app/uploads'),
+        ],
+
         'base' => [
             'driver' => 'local',
             'root' => base_path() . DIRECTORY_SEPARATOR,

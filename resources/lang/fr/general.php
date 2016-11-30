@@ -31,6 +31,7 @@ return [
     'logout' => 'Déconnexion',
     'edit' => 'Mise à jour de',
     'go' => 'Accès',
+    'created-at' => 'Crée il y à',
 
     'mon' => 'lundi',
     'tue' => 'mardi',

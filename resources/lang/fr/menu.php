@@ -13,8 +13,12 @@ return [
     'dashboard' => 'Accueil',
     'preferences' => 'Préférences',
 
-    'admin-role' => 'Administrateur',
-    'admin-role' => 'Administrateur',
+    'user-role' => 'Utilisateur',
+    'user-vaults-link' => 'Porte-documents',
+
+    'manager-role' => 'Manager',
+    'manager-vaults-link' => 'Gérer mes porte-documents',
+    'manager-documents-link' => 'Gérer mes documents',
 
     'admin-role' => 'Administrateur',
     'admin-users-link' => 'Utilisateurs',

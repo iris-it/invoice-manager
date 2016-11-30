@@ -14,7 +14,7 @@ class CreateRelationDocumentsVaults extends Migration
     {
 
         Schema::table('documents', function ($table) {
-            $table->integer('vault_id')->unsigned()->nullable()->default(3)->index();
+            $table->integer('vault_id')->unsigned()->nullable()->index();
             $table->foreign('vault_id')->references('id')->on('vaults')->onDelete('set null');
         });
     }

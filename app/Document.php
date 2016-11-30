@@ -17,16 +17,19 @@ class Document extends Model
     protected $fillable = [
         'name',
         'path',
+        'uuid',
+        'user_id',
+        'vault_id'
     ];
 
     public function owner()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\User', 'user_id');
     }
 
     public function vault()
     {
-        return $this->belongsTo('App\Vault');
+        return $this->belongsTo('App\Vault', 'vault_id');
     }
 
 }

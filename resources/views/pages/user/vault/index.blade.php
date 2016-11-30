@@ -7,29 +7,32 @@
             <div class="col-md-12">
                 <div class="box">
                     <div class="box-header with-border">
-                        <h3 class="box-title">{{trans('document.list')}} ({{$documents->count()}})</h3>
+                        <h3 class="box-title">{{trans('vault.list')}} ({{$vaults->count()}})</h3>
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
                         <table class="table table-bordered">
                             <thead>
                             <tr>
-                                <th>{{trans('document.table-name')}}</th>
+                                <th>{{trans('vault.table-name')}}</th>
+                                <th>{{trans('vault.table-description')}}</th>
+                                <th>{{trans('vault.table-documents')}}</th>
+                                <th>{{trans('vault.table-validated')}}</th>
                                 <th>{{trans('general.created-at')}}</th>
-                                <th>{{trans('document.table-actions')}}</th>
+                                <th>{{trans('vault.table-actions')}}</th>
                             </tr>
                             </thead>
                             <tbody class="animated fadeIn">
-                            @foreach($documents as $document)
+                            @foreach($vaults as $vault)
                                 <tr>
-                                    <td class="font-w600">{{$document->name}}</td>
-                                    <td>{{$document->created_at->diffForHumans()}}</td>
+                                    <td class="font-w600">{{$vault->name}}</td>
+                                    <td>{{$vault->description}}</td>
+                                    <td>{{$vault->documents->count()}}</td>
+                                    <td>{{($vault->users()->where('user_id', auth()->user()->id)->first()->pivot->is_valid)? trans('general.yes'): trans('general.no')}}</td>
+                                    <td>{{$vault->created_at->diffForHumans()}}</td>
                                     <td>
-                                        <a href="{{url('serve/'.$document->uuid)}}" class="btn btn-flat btn-default" type="button" data-toggle="tooltip" title="{{trans('document.show-action')}}">
+                                        <a href="{{action('VaultController@show', $vault->id)}}" class="btn btn-flat btn-default" type="button" data-toggle="tooltip" title="{{trans('vault.show-action')}}">
                                             <i class="fa fa-eye"></i>
-                                        </a>
-                                        <a href="{{action('Manager\DocumentController@destroy',['id' => $document->id])}}" class="btn btn-flat btn-danger" data-method="DELETE" data-toggle="tooltip" title="{{trans('document.delete-action')}}" data-token="{{csrf_token()}}" data-confirm="{{trans('document.delete-action-warning')}}">
-                                            <i class="fa fa-trash"></i>
                                         </a>
                                     </td>
                                 </tr>
@@ -39,7 +42,7 @@
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer clearfix">
-                        {!! $documents->render() !!}
+                        {!! $vaults->render() !!}
                     </div>
                 </div>
             </div>

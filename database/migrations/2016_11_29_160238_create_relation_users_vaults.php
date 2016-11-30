@@ -18,19 +18,11 @@ class CreateRelationUsersVaults extends Migration
 
             $table->integer('user_id')->unsigned();
             $table->integer('vault_id')->unsigned();
-            $table->boolean('is_valid')->false();
+            $table->boolean('is_valid')->default(false);
+            $table->timestamps();
 
-            $table->foreign('user_id')
-                ->references('id')
-                ->on('users')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
-
-            $table->foreign('vault_id')
-                ->references('id')
-                ->on('vaults')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('vault_id')->references('id')->on('vaults')->onUpdate('cascade')->onDelete('cascade');
 
             $table->primary(['user_id', 'vault_id']);
         });
