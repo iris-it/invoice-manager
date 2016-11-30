@@ -13,6 +13,11 @@ use Laracasts\Flash\Flash;
 class RoleController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware('can:permission::access_admin_section');
+    }
+
     /**
      * Show the application dashboard.
      *

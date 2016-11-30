@@ -15,13 +15,22 @@ use Laracasts\Flash\Flash;
 
 class VaultController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('can:permission::access_manager_section');
+    }
+
     /**
      * Display a listing of the resource.
      *
      */
     public function index()
     {
-        $vaults = Vault::paginate(10);
+
+        $user = auth()->user();
+
+        $vaults = $user->vaults()->paginate(10);
 
         return view('pages.manager.vault.index')->with(compact('vaults'));
     }
@@ -103,6 +112,10 @@ class VaultController extends Controller
     {
         $vault = Vault::findOrFail($id);
 
+        if (auth()->user()->id !== $vault->owner->id) {
+            return abort(404);
+        }
+
         return view('pages.manager.vault.show')->with(compact('vault'));
     }
 
@@ -115,6 +128,10 @@ class VaultController extends Controller
     public function edit($id)
     {
         $vault = Vault::findOrFail($id);
+
+        if (auth()->user()->id !== $vault->owner->id) {
+            return abort(404);
+        }
 
         $emails = $vault->users->reduce(function ($carry, $item) {
             if (!$carry) return $item->email;
@@ -136,6 +153,10 @@ class VaultController extends Controller
     public function update(VaultRequest $request, $id, ProcessEmails $processEmails, ProcessFiles $processFiles)
     {
         $vault = Vault::findOrFail($id);
+
+        if (auth()->user()->id !== $vault->owner->id) {
+            return abort(404);
+        }
 
         $data = $request->all();
 

@@ -10,6 +10,11 @@ use Laracasts\Flash\Flash;
 
 class VaultController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('can:permission::access_user_section');
+    }
+
     /**
      * Display a listing of the resource.
      *

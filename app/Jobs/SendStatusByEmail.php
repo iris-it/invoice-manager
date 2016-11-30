@@ -45,7 +45,7 @@ class SendStatusByEmail implements ShouldQueue
         $user = $this->user;
         $status = $this->status;
         $vault = $this->vault;
-        $link = action('VaultController@show', $vault->id);
+        $link = action('Manager\VaultController@show', $vault->id);
 
         Mail::send('emails.vault-hasvalidate', ['owner' => $owner->name, 'user' => $user->name, 'status' => $status, 'vault' => $vault, 'link' => $link], function ($message) use ($owner) {
             $message->to($owner->email, $owner->name);

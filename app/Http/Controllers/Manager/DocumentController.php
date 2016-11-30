@@ -10,6 +10,12 @@ use Laracasts\Flash\Flash;
 
 class DocumentController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('can:permission::access_manager_section');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -32,7 +38,12 @@ class DocumentController extends Controller
      */
     public function destroy($id)
     {
+
         $document = Document::findOrFail($id);
+
+        if (auth()->user()->id !== $document->owner->id) {
+            return abort(404);
+        }
 
         $disk = Storage::disk('uploads');
 
