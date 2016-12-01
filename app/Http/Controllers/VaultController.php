@@ -59,7 +59,7 @@ class VaultController extends Controller
      * @param $document
      * @return \Illuminate\Http\Response
      */
-    public function validateToggle(Request $request, $id, $document)
+    public function validateDocument(Request $request, $id, $document)
     {
         $vault = Vault::findOrFail($id);
 
@@ -69,9 +69,32 @@ class VaultController extends Controller
 
         $document->validated_by_users()->updateExistingPivot($user->id, ['is_valid' => true]);
 
-        $this->dispatch(new SendStatusByEmail($user, $vault, boolval($request->has('status'))));
+        $this->dispatch(new SendStatusByEmail($user, $vault, $document, true));
 
         Flash::success(Lang::get('vault.validate-success'));
+
+        return redirect(action('VaultController@show', $id));
+    }
+
+    /**
+     * validate Toggle the specified resource.
+     *
+     * @param Request $request
+     * @param  int $id
+     * @param $document
+     * @return \Illuminate\Http\Response
+     */
+    public function unvalidateDocument(Request $request, $id, $document)
+    {
+        $vault = Vault::findOrFail($id);
+
+        $document = Document::findOrFail($document);
+
+        $user = auth()->user();
+
+        $this->dispatch(new SendStatusByEmail($user, $vault, $document, false));
+
+        Flash::success(Lang::get('vault.unvalidate-success'));
 
         return redirect(action('VaultController@show', $id));
     }

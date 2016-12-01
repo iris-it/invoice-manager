@@ -60,4 +60,6 @@ return [
     'destroy-success' => 'Le porte-document a été supprimé avec succès',
     'destroy-failed' => 'La suppression du porte-document a échoué',
 
+    'ask-for-unvalidate' => 'demande une validation de son annulation pour le document : ',
+
 ];

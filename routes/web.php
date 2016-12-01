@@ -36,7 +36,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['prefix' => 'user'], function () {
         Route::get('vaults', 'VaultController@index');
         Route::get('vaults/{id}', 'VaultController@show');
-        Route::post('vaults/{id}/validate/{document}/toggle', 'VaultController@validateToggle');
+        Route::post('vaults/{id}/validate/{document}', 'VaultController@validateDocument');
+        Route::post('vaults/{id}/unvalidate/{document}', 'VaultController@unvalidateDocument');
     });
 
     /*
@@ -54,6 +55,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('vaults/{id}/edit', 'VaultController@edit');
         Route::put('vaults/{id}', 'VaultController@update');
         Route::delete('vaults/{id}', 'VaultController@destroy');
+
+        Route::get('vaults/{vault_id}/abort/document/{document_id}/user/{user_id}', 'VaultController@abortUserValidation');
+        Route::post('vaults/{vault_id}/abort/document/{document_id}/user/{user_id}/{status}', 'VaultController@processAbortUserValidation');
 
         /*
          * Documents resources

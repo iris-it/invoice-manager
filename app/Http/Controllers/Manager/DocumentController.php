@@ -53,7 +53,7 @@ class DocumentController extends Controller
 
         Flash::success(Lang::get('document.destroy-success'));
 
-        return redirect(action('Manager\DocumentController@index'));
+        return redirect()->back();
 
     }
 }

@@ -17,6 +17,11 @@ return [
     'no' => 'Non',
     'go-back' => 'Retour',
     'about' => 'A propos',
+    'accept' => 'Accepter',
+    'refuse' => 'Refuser',
+    'accept-request' => 'Accepter la requête',
+    'refuse-request' => 'Refuser la requête',
+
 
     'overview' => 'Vue d\'ensemble',
     'welcome' => 'Bienvenue',
@@ -32,6 +37,9 @@ return [
     'edit' => 'Mise à jour de',
     'go' => 'Accès',
     'created-at' => 'Crée il y à',
+    'abort' => 'Annuler',
+    'validate' => 'Valider',
+    'by' => 'par',
 
     'mon' => 'lundi',
     'tue' => 'mardi',

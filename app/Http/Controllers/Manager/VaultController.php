@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Manager;
 
+use App\Document;
 use App\Http\Requests\Manager\VaultRequest;
+use App\Jobs\SendAbortStatusByEmail;
 use App\Jobs\SendVaultLinkByEmail;
 use App\Services\ProcessEmails;
 use App\Services\ProcessFiles;
+use App\User;
 use App\Vault;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -218,5 +221,35 @@ class VaultController extends Controller
 
         return redirect(action('Manager\VaultController@index'));
 
+    }
+
+
+    public function abortUserValidation($vault_id, $document_id, $user_id)
+    {
+        $vault = Vault::findOrFail($vault_id);
+
+        $document = Document::findOrFail($document_id);
+
+        $user = User::findOrFail($user_id);
+
+        return view('pages.manager.vault.abort-validation')->with(compact('vault', 'document', 'user'));
+    }
+
+    public function processAbortUserValidation($vault_id, $document_id, $user_id, $status)
+    {
+        $vault = Vault::findOrFail($vault_id);
+
+        $document = Document::findOrFail($document_id);
+
+        $user = User::findOrFail($user_id);
+
+        if (boolval($status)) {
+            $document->validated_by_users()->updateExistingPivot($user->id, ['is_valid' => false]);
+            $this->dispatch(new SendAbortStatusByEmail($user, $vault, $document, true));
+        } else {
+            $this->dispatch(new SendAbortStatusByEmail($user, $vault, $document, false));
+        }
+
+        return redirect(action('Manager\VaultController@show', $vault_id));
     }
 }

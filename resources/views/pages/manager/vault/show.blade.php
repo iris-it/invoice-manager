@@ -31,11 +31,34 @@
                                 <div class="form-group">
                                     <div class="col-md-12 col-xs-12">
                                         <label>{{trans('vault.users-field')}}</label>
-                                        <ul>
-                                            @foreach($vault->users as $user)
-                                                <li><b>{{($vault->users()->where('user_id', $user->id)->first()->pivot->is_valid)?trans('general.yes'):trans('general.no')}}</b> : {{$user->name}} ({{$user->email}})</li>
-                                            @endforeach
-                                        </ul>
+                                        @foreach($vault->users as $user)
+                                            <div class="form-group">
+                                                <div class="col-md-12 col-xs-12">
+                                                    <table class="table table-bordered">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>{{trans('vault.documents-field')}} {{trans('general.by')}} <b>{{$user->name}}</b> ({{$user->email}})</th>
+                                                            <th>{{trans('vault.table-validated')}}</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody class="animated fadeIn">
+                                                        @foreach($vault->documents as $document)
+                                                            <tr>
+                                                                <td class="font-w600">{{$document->name}})</td>
+                                                                <td>
+                                                                    @if($document->validated_by_users()->where('user_id', $user->id)->first()->pivot->is_valid)
+                                                                        <b class="text-green">{{trans('general.yes')}}</b>
+                                                                    @else
+                                                                        <b class="text-red">{{trans('general.no')}}</b>
+                                                                    @endif
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        @endforeach
                                     </div>
                                 </div>
 

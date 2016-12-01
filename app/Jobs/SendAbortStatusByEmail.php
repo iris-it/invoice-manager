@@ -11,7 +11,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Mail;
 
-class SendStatusByEmail implements ShouldQueue
+class SendAbortStatusByEmail implements ShouldQueue
 {
     use InteractsWithQueue, Queueable, SerializesModels;
 
@@ -48,18 +48,20 @@ class SendStatusByEmail implements ShouldQueue
     public function handle()
     {
         $owner = $this->vault->owner;
+
         $user = $this->user;
 
         $status = $this->status;
 
         $vault = $this->vault;
+
         $document = $this->document;
 
-        $link = action('Manager\VaultController@show', $vault->id);
+        $link = action('VaultController@show', $vault->id);
 
-        Mail::send('emails.vault-hasvalidate', ['owner' => $owner, 'user' => $user, 'document' => $document, 'status' => $status, 'vault' => $vault, 'link' => $link], function ($message) use ($owner) {
-            $message->to($owner->email, $owner->name);
-            $message->subject('Invitation');
+        Mail::send('emails.vault-abortstatus', ['owner' => $owner, 'user' => $user, 'document' => $document, 'status' => $status, 'vault' => $vault, 'link' => $link], function ($message) use ($user) {
+            $message->to($user->email, $user->name);
+            $message->subject('Status de l\'annulation');
         });
     }
 }
