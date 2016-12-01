@@ -34,6 +34,7 @@ return [
     'table-users' => 'Nombre d\'utilisateurs',
     'table-validated' => 'Validé ?',
     'table-actions' => 'Actions',
+    'table-download' => 'Télécharger',
 
     'name-field' => 'Nom du porte-document',
     'description-field' => 'Description du porte-document',
@@ -59,6 +60,9 @@ return [
     'reset-failed' => 'La mise à jour du porte-document a échoué',
     'destroy-success' => 'Le porte-document a été supprimé avec succès',
     'destroy-failed' => 'La suppression du porte-document a échoué',
+
+    'validate-success' => 'Votre validation a bien été prise en compte',
+    'unvalidate-success' => 'Votre demande d\'annulation a bien été prise en compte',
 
     'ask-for-unvalidate' => 'demande une validation de son annulation pour le document : ',
 
