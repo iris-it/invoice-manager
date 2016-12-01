@@ -23,7 +23,6 @@
                                 <th>{{trans('vault.table-description')}}</th>
                                 <th>{{trans('vault.table-documents')}}</th>
                                 <th>{{trans('vault.table-users')}}</th>
-                                <th>{{trans('vault.table-validated')}}</th>
                                 <th>{{trans('general.created-at')}}</th>
                                 <th>{{trans('vault.table-actions')}}</th>
                             </tr>
@@ -35,7 +34,6 @@
                                     <td>{{$vault->description}}</td>
                                     <td>{{$vault->documents->count()}}</td>
                                     <td>{{$vault->users->count()}}</td>
-                                    <td>{{$vault->users()->where('is_valid', true)->count()}} / {{$vault->users->count()}}</td>
                                     <td>{{$vault->created_at->diffForHumans()}}</td>
                                     <td>
                                         <a href="{{action('Manager\VaultController@show', $vault->id)}}" class="btn btn-flat btn-default" type="button" data-toggle="tooltip" title="{{trans('vault.show-action')}}">

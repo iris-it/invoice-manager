@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Document;
 use App\Jobs\SendStatusByEmail;
 use App\Vault;
 use Illuminate\Http\Request;
@@ -47,8 +48,6 @@ class VaultController extends Controller
             return abort(404);
         }
 
-        $status = $vault->users()->where('user_id', $user->id)->first()->pivot->is_valid;
-
         return view('pages.user.vault.show')->with(compact('vault', 'status'));
     }
 
@@ -57,15 +56,18 @@ class VaultController extends Controller
      *
      * @param Request $request
      * @param  int $id
+     * @param $document
      * @return \Illuminate\Http\Response
      */
-    public function validateToggle(Request $request, $id)
+    public function validateToggle(Request $request, $id, $document)
     {
         $vault = Vault::findOrFail($id);
 
+        $document = Document::findOrFail($document);
+
         $user = auth()->user();
 
-        $vault->users()->updateExistingPivot($user->id, ['is_valid' => boolval($request->has('status'))]);
+        $document->validated_by_users()->updateExistingPivot($user->id, ['is_valid' => true]);
 
         $this->dispatch(new SendStatusByEmail($user, $vault, boolval($request->has('status'))));
 

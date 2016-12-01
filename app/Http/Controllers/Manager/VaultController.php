@@ -76,9 +76,12 @@ class VaultController extends Controller
          */
         $files = $processFiles->initialize($request->file('files'), $vault)->processFiles();
         foreach ($files as $file) {
+
             $file->vault()->associate($vault);
             $file->owner()->associate($request->user());
             $file->save();
+
+            $file->validated_by_users()->sync($users->pluck('id')->all());
         }
 
         /*
@@ -181,6 +184,8 @@ class VaultController extends Controller
                 $file->vault()->associate($vault);
                 $file->owner()->associate($request->user());
                 $file->save();
+
+                $file->validated_by_users()->sync($users->pluck('id')->all());
             }
         }
 

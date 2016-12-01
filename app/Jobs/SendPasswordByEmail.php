@@ -38,7 +38,7 @@ class SendPasswordByEmail implements ShouldQueue
 
         $user->update(['password' => bcrypt($password)]);
 
-        Mail::send('emails.password-reset', ['name' => $user->name, 'email' => $user->email, 'password' => $password], function ($message) use ($user) {
+        Mail::send('emails.password-reset', ['name' => $user->name, 'email' => $user->email, 'password' => $password, 'url' => url('/')], function ($message) use ($user) {
             $message->to($user->email, $user->name);
             $message->subject('Identifiants');
         });

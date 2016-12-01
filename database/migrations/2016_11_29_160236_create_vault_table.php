@@ -19,6 +19,12 @@ class CreateVaultTable extends Migration
             $table->string('description')->nullable();
             $table->timestamps();
         });
+
+        Schema::table('vaults', function ($table) {
+            $table->integer('user_id')->unsigned()->nullable()->index();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
+        });
+
     }
 
     /**

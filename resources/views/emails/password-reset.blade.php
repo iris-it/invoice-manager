@@ -12,7 +12,7 @@
         <li>Mot de passe : {{$password}}</li>
     </ul>
 
-    <a href="{{url()}}">Lien vers l'application</a>
+    <a href="{{$url}}">Lien vers l'application</a>
 
     @include('beautymail::templates.widgets.articleEnd')
 

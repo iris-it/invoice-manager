@@ -31,25 +31,34 @@
                                 <div class="form-group">
                                     <div class="col-md-12 col-xs-12">
                                         <label>{{trans('vault.documents-field')}}</label>
-                                        <ul>
+                                        <table class="table table-bordered">
+                                            <thead>
+                                            <tr>
+                                                <th>{{trans('vault.table-description')}}</th>
+                                                <th>{{trans('vault.table-actions')}}</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody class="animated fadeIn">
                                             @foreach($vault->documents as $document)
-                                                <li>{{$document->name}} (<a href="{{url('serve/'.$document->uuid)}}"> Telecharger </a>)</li>
+                                                <tr>
+                                                    <td class="font-w600">{{$document->name}} (<a href="{{url('serve/'.$document->uuid)}}"> Telecharger </a>)</td>
+                                                    <td>
+
+                                                        @if($document->validated_by_users()->where('user_id', auth()->user()->id)->first()->pivot->is_valid)
+
+                                                        @else
+                                                            <a href="{{action('VaultController@validateToggle',['id' => $vault->id,'document' => $document->id])}}" class="btn btn-flat btn-danger" data-method="POST" data-toggle="tooltip" title="{{trans('vault.validate-action')}}" data-token="{{csrf_token()}}" data-confirm="{{trans('vault.validate-action-warning')}}">
+                                                                <i class="fa fa-check"></i>
+                                                            </a>
+                                                        @endif
+                                                    </td>
+                                                </tr>
                                             @endforeach
-                                        </ul>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
 
-                                {!! Form::open(['method' => 'POST','action' => ['VaultController@validateToggle',$vault->id]]) !!}
-
-                                <div class="form-group">
-                                    <div class="col-md-12 col-xs-12">
-                                        <div class="checkbox">
-                                            <label>
-                                                {!! Form::checkbox('status', true ,$status) !!} {{trans('vault.validate-field')}}
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
 
                                 <div class="box-footer">
                                     <a href="{{action('VaultController@index')}}" class="btn btn-flat btn-sm btn-info" type="button">
@@ -60,7 +69,6 @@
                                     </button>
                                 </div>
 
-                                {!! Form::close() !!}
                             </div>
                         </div>
                     </div>

@@ -36,7 +36,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['prefix' => 'user'], function () {
         Route::get('vaults', 'VaultController@index');
         Route::get('vaults/{id}', 'VaultController@show');
-        Route::post('vaults/{id}/validate/toggle', 'VaultController@validateToggle');
+        Route::post('vaults/{id}/validate/{document}/toggle', 'VaultController@validateToggle');
     });
 
     /*

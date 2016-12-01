@@ -32,4 +32,9 @@ class Document extends Model
         return $this->belongsTo('App\Vault', 'vault_id');
     }
 
+    public function validated_by_users()
+    {
+        return $this->belongsToMany('App\User', 'document_pivot', 'document_id', 'user_id')->withPivot('is_valid')->withTimestamps();
+    }
+
 }

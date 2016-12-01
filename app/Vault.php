@@ -28,7 +28,7 @@ class Vault extends Model
 
     public function users()
     {
-        return $this->belongsToMany('App\User', 'vault_pivot', 'vault_id', 'user_id')->withPivot('is_valid')->withTimestamps();
+        return $this->belongsToMany('App\User', 'vault_pivot', 'vault_id', 'user_id')->withTimestamps();
     }
 
     public function documents()
