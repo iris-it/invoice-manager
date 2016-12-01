@@ -56,7 +56,7 @@
                                                     <td class="font-w600">{{$document->name}}</td>
                                                     <td>{{$document->created_at->diffForHumans()}}</td>
                                                     <td>
-                                                        <a href="{{url('serve/'.$document->uuid)}}" class="btn btn-flat btn-default" type="button" data-toggle="tooltip" title="{{trans('vault.show-action')}}">
+                                                        <a href="{{url('serve/'.$document->uuid)}}" target="_blank" class="btn btn-flat btn-default" type="button" data-toggle="tooltip" title="{{trans('vault.show-action')}}">
                                                             <i class="fa fa-eye"></i>
                                                         </a>
                                                         <a href="{{action('Manager\DocumentController@destroy',['id' => $document->id])}}" class="btn btn-flat btn-danger" data-method="DELETE" data-toggle="tooltip" title="{{trans('document.delete-action')}}" data-token="{{csrf_token()}}" data-confirm="{{trans('document.delete-action-warning')}}">

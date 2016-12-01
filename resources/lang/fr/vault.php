@@ -34,7 +34,7 @@ return [
     'table-users' => 'Nombre d\'utilisateurs',
     'table-validated' => 'Validé ?',
     'table-actions' => 'Actions',
-    'table-download' => 'Télécharger',
+    'table-download' => 'Documents',
 
     'name-field' => 'Nom du porte-document',
     'description-field' => 'Description du porte-document',

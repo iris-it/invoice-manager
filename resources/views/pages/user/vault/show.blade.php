@@ -43,7 +43,7 @@
                                             @foreach($vault->documents as $document)
                                                 <tr>
                                                     <td class="font-w600">{{$document->name}})</td>
-                                                    <td><a href="{{url('serve/'.$document->uuid)}}"> Telecharger </a></td>
+                                                    <td><a href="{{url('serve/'.$document->uuid)}}" target="_blank"> {{trans('general.show')}} </a></td>
                                                     <td>
                                                         @if($document->validated_by_users()->where('user_id', auth()->user()->id)->first()->pivot->is_valid)
                                                             <a href="{{action('VaultController@unvalidateDocument',['id' => $vault->id,'document' => $document->id])}}" class="btn btn-flat btn-danger btn-block" data-method="POST" data-toggle="tooltip" title="{{trans('vault.validate-action')}}" data-token="{{csrf_token()}}" data-confirm="{{trans('vault.validate-action-warning')}}">

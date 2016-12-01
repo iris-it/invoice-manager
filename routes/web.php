@@ -25,7 +25,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/serve/{uuid}', function ($uuid) {
         $document = App\Document::where('uuid', $uuid)->get()->first();
-        return response()->download(storage_path(
+        return response()->file(storage_path(
             'app' . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . $document->path
         ));
     });

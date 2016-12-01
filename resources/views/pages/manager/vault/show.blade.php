@@ -67,7 +67,7 @@
                                         <label>{{trans('vault.documents-field')}}</label>
                                         <ul>
                                             @foreach($vault->documents as $document)
-                                                <li>{{$document->name}} (<a href="{{url('serve/'.$document->uuid)}}"> Telecharger </a>)</li>
+                                                <li>{{$document->name}} (<a href="{{url('serve/'.$document->uuid)}}" target="_blank"> {{trans('general.show')}} </a>)</li>
                                             @endforeach
                                         </ul>
                                     </div>

@@ -21,6 +21,7 @@ return [
     'refuse' => 'Refuser',
     'accept-request' => 'Accepter la requête',
     'refuse-request' => 'Refuser la requête',
+    'show' => 'Afficher',
 
 
     'overview' => 'Vue d\'ensemble',
