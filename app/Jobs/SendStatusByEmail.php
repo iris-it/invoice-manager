@@ -59,7 +59,7 @@ class SendStatusByEmail implements ShouldQueue
 
         Mail::send('emails.vault-hasvalidate', ['owner' => $owner, 'user' => $user, 'document' => $document, 'status' => $status, 'vault' => $vault, 'link' => $link], function ($message) use ($owner) {
             $message->to($owner->email, $owner->name);
-            $message->subject('Invitation');
+            $message->subject('Status de validation');
         });
     }
 }

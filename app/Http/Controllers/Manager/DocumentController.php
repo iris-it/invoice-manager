@@ -17,20 +17,6 @@ class DocumentController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function index()
-    {
-        $user = auth()->user();
-
-        $documents = $user->documents()->paginate(10);
-
-        return view('pages.manager.document.index')->with(compact('documents'));
-    }
-
-    /**
      * Remove the specified resource from storage.
      *
      * @param  int $id
@@ -46,6 +32,11 @@ class DocumentController extends Controller
         }
 
         $disk = Storage::disk('uploads');
+
+        if ($document->validation_document) {
+            $disk->delete($document->validation_document->path);
+            $document->validation_document->delete();
+        }
 
         $disk->delete($document->path);
 

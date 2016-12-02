@@ -93,10 +93,4 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Vault', 'vault_pivot', 'user_id', 'vault_id')->withTimestamps();
     }
 
-    public function validated_documents()
-    {
-        return $this->belongsToMany('App\Documents', 'document_pivot', 'user_id', 'document_id')->withPivot('is_valid')->withTimestamps();
-    }
-
-
 }

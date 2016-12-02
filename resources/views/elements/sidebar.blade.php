@@ -2,9 +2,6 @@
     <section class="sidebar">
         <ul class="sidebar-menu">
 
-            <li class="header text-center">{{ trans('menu.title') }}</li>
-            <li><a href="{{ action('HomeController@index') }}"><i class="fa fa-dashboard"></i><span>{{ trans('menu.dashboard') }}</span></a></li>
-
             @can('permission::access_user_section')
                 <li class="header text-center">{{ trans('menu.user-role') }}</li>
                 <li><a href="{{ action('VaultController@index') }}">{{trans('menu.user-vaults-link')}}</a></li>
@@ -14,7 +11,6 @@
             @can('permission::access_manager_section')
                 <li class="header text-center">{{ trans('menu.manager-role') }}</li>
                 <li><a href="{{ action('Manager\VaultController@index') }}">{{trans('menu.manager-vaults-link')}}</a></li>
-                <li><a href="{{ action('Manager\DocumentController@index') }}">{{trans('menu.manager-documents-link')}}</a></li>
             @endcan
 
             @can('permission::access_admin_section')

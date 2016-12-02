@@ -72,19 +72,24 @@ class VaultController extends Controller
          * Create or get users and attach them to vault
          */
         $users = $processEmails->initialize($data['emails'])->processUsers();
+
+        /*
+         * Add all users to the current vault
+         */
         $vault->users()->sync($users->pluck('id')->all());
 
         /*
          * Store files to vault
          */
         $files = $processFiles->initialize($request->file('files'), $vault)->processFiles();
-        foreach ($files as $file) {
 
+        /*
+         * Add all the documents to the vault and the owner
+         */
+        foreach ($files as $file) {
             $file->vault()->associate($vault);
             $file->owner()->associate($request->user());
             $file->save();
-
-            $file->validated_by_users()->sync($users->pluck('id')->all());
         }
 
         /*
@@ -139,6 +144,9 @@ class VaultController extends Controller
             return abort(404);
         }
 
+        /*
+         * Rebuild the string for the emails form with comas "user@mail.com,user2@mail.com'
+         */
         $emails = $vault->users->reduce(function ($carry, $item) {
             if (!$carry) return $item->email;
             return $carry . ',' . $item->email;
@@ -178,17 +186,29 @@ class VaultController extends Controller
          * Create or get users and attach them to vault
          */
         $users = $processEmails->initialize($data['emails'])->processUsers();
+
+        /*
+        * Add all users to the current vault
+        */
         $vault->users()->sync($users->pluck('id')->all());
 
-
+        /*
+         * If we add more files
+         */
         if ($request->hasFile('files')) {
+
+            /*
+             * Upload all files and return a collection
+             */
             $files = $processFiles->initialize($request->file('files'), $vault)->processFiles();
+
+            /*
+             * Add all the documents to the vault and the owner
+             */
             foreach ($files as $file) {
                 $file->vault()->associate($vault);
                 $file->owner()->associate($request->user());
                 $file->save();
-
-                $file->validated_by_users()->sync($users->pluck('id')->all());
             }
         }
 
@@ -209,6 +229,12 @@ class VaultController extends Controller
         $disk = Storage::disk('uploads');
 
         foreach ($vault->documents as $document) {
+
+            if ($document->validation_document) {
+                $disk->delete($document->validation_document->path);
+                $document->validation_document->delete();
+            }
+
             $disk->delete($document->path);
             $document->delete();
         }
@@ -244,7 +270,14 @@ class VaultController extends Controller
         $user = User::findOrFail($user_id);
 
         if (boolval($status)) {
-            $document->validated_by_users()->updateExistingPivot($user->id, ['is_valid' => false]);
+
+            $disk = Storage::disk('uploads');
+
+            if ($document->validation_document) {
+                $disk->delete($document->validation_document->path);
+                $document->validation_document->delete();
+            }
+
             $this->dispatch(new SendAbortStatusByEmail($user, $vault, $document, true));
         } else {
             $this->dispatch(new SendAbortStatusByEmail($user, $vault, $document, false));

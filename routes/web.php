@@ -62,7 +62,6 @@ Route::group(['middleware' => 'auth'], function () {
         /*
          * Documents resources
          */
-        Route::get('documents', 'DocumentController@index');
         Route::delete('documents/{id}', 'DocumentController@destroy');
 
     });

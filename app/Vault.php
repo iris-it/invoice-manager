@@ -36,4 +36,19 @@ class Vault extends Model
         return $this->hasMany('App\Document');
     }
 
+    public function number_validated_documents()
+    {
+        return $this->documents()->get()->reduce(function ($carry, $item) {
+            if ($item->validation_document) {
+                return $carry + 1;
+            }
+            return $carry;
+        }, 0);
+    }
+
+    public function fully_validated_documents()
+    {
+        return ($this->documents()->count() === $this->number_validated_documents());
+    }
+
 }

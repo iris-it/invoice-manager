@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Document;
 use App\Jobs\SendStatusByEmail;
+use App\Services\ProcessValidationFile;
 use App\Vault;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Lang;
@@ -57,9 +58,10 @@ class VaultController extends Controller
      * @param Request $request
      * @param  int $id
      * @param $document
+     * @param ProcessValidationFile $processValidationFile
      * @return \Illuminate\Http\Response
      */
-    public function validateDocument(Request $request, $id, $document)
+    public function validateDocument(Request $request, $id, $document, ProcessValidationFile $processValidationFile)
     {
         $vault = Vault::findOrFail($id);
 
@@ -67,7 +69,9 @@ class VaultController extends Controller
 
         $user = auth()->user();
 
-        $document->validated_by_users()->updateExistingPivot($user->id, ['is_valid' => true]);
+        $file = $processValidationFile->initialize($request->file('file'), $vault)->processValidationFile();
+
+        $document->validation_document()->save($file);
 
         $this->dispatch(new SendStatusByEmail($user, $vault, $document, true));
 
@@ -79,12 +83,12 @@ class VaultController extends Controller
     /**
      * validate Toggle the specified resource.
      *
-     * @param Request $request
      * @param  int $id
      * @param $document
      * @return \Illuminate\Http\Response
+     * @internal param Request $request
      */
-    public function unvalidateDocument(Request $request, $id, $document)
+    public function unvalidateDocument($id, $document)
     {
         $vault = Vault::findOrFail($id);
 

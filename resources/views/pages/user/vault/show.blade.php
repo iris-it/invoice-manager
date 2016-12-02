@@ -36,6 +36,7 @@
                                             <tr>
                                                 <th>{{trans('vault.table-description')}}</th>
                                                 <th>{{trans('vault.table-download')}}</th>
+                                                <th>{{trans('vault.table-download-validated')}}</th>
                                                 <th>{{trans('vault.table-actions')}}</th>
                                             </tr>
                                             </thead>
@@ -45,14 +46,28 @@
                                                     <td class="font-w600">{{$document->name}})</td>
                                                     <td><a href="{{url('serve/'.$document->uuid)}}" target="_blank"> {{trans('general.show')}} </a></td>
                                                     <td>
-                                                        @if($document->validated_by_users()->where('user_id', auth()->user()->id)->first()->pivot->is_valid)
+                                                        @if($document->validation_document)
+                                                            <a href="{{url('serve/'.$document->validation_document->uuid)}}" target="_blank"> {{trans('general.show')}} </a>
+                                                        @else
+                                                            {{trans('general.not-available')}}
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        @if($document->validation_document)
                                                             <a href="{{action('VaultController@unvalidateDocument',['id' => $vault->id,'document' => $document->id])}}" class="btn btn-flat btn-danger btn-block" data-method="POST" data-toggle="tooltip" title="{{trans('vault.validate-action')}}" data-token="{{csrf_token()}}" data-confirm="{{trans('vault.validate-action-warning')}}">
                                                                 <i class="fa fa-refresh"></i> {{trans('general.abort')}}
                                                             </a>
                                                         @else
-                                                            <a href="{{action('VaultController@validateDocument',['id' => $vault->id,'document' => $document->id])}}" class="btn btn-flat btn-success btn-block" data-method="POST" data-toggle="tooltip" title="{{trans('vault.validate-action')}}" data-token="{{csrf_token()}}" data-confirm="{{trans('vault.validate-action-warning')}}">
-                                                                <i class="fa fa-check"></i> {{trans('general.validate')}}
-                                                            </a>
+                                                            {!! Form::open(['method' => 'POST','action' => ['VaultController@validateDocument', 'id' => $vault->id,'document' => $document->id], 'files' => true]) !!}
+                                                            <div class="input-group">
+                                                                {!! Form::file('file',['class' => 'form-control']) !!}
+                                                                <span class="input-group-btn">
+                                                                   <button class="btn btn-flat btn-success btn-block" type="submit">
+                                                                       <i class="fa fa-check"></i> {{trans('general.validate')}}
+                                                                   </button>
+                                                                </span>
+                                                            </div>
+                                                            {!! Form::close() !!}
                                                         @endif
                                                     </td>
                                                 </tr>
@@ -62,14 +77,10 @@
                                     </div>
                                 </div>
 
-
                                 <div class="box-footer">
                                     <a href="{{action('VaultController@index')}}" class="btn btn-flat btn-sm btn-info" type="button">
                                         <i class="fa fa-arrow-left"></i> {{trans('vault.back-action')}}
                                     </a>
-                                    <button class="btn btn-flat btn-sm btn-primary" type="submit">
-                                        <i class="fa fa-check push-5-r"></i> {{trans('vault.validate-action')}}
-                                    </button>
                                 </div>
 
                             </div>

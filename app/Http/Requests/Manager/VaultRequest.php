@@ -41,6 +41,7 @@ class VaultRequest extends Request
             'name' => 'required|max:100',
             'description' => 'required|max:300',
             'emails.*' => 'required|email',
+            'files' => 'required',
             'files.*.file' => 'max:20240'
         ];
 

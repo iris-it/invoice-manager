@@ -44,7 +44,7 @@ class SendVaultLinkByEmail implements ShouldQueue
 
         Mail::send('emails.vault-invitation', ['user' => $user, 'vault' => $vault, 'link' => $link], function ($message) use ($user) {
             $message->to($user->email, $user->name);
-            $message->subject('Invitation');
+            $message->subject('Invitation porte document');
         });
     }
 }
