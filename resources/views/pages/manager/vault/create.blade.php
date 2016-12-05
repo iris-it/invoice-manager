@@ -35,7 +35,7 @@
                                         {!! Form::email('emails', null, ['class' => 'form-control', 'autocomplete' => 'on', 'required', 'multiple']) !!}
                                     </div>
                                     <div class="col-md-6">
-                                        <label for="email">{{trans('vault.files-field')}}<span class="text-danger animated flash"> *</span></label>
+                                        <label for="email">{{trans('vault.files-field')}}</label>
                                         {!! Form::file('files[]',['class' => 'form-control', 'multiple' => 'true']) !!}
                                     </div>
                                 </div>
