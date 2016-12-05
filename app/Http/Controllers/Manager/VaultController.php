@@ -79,17 +79,22 @@ class VaultController extends Controller
         $vault->users()->sync($users->pluck('id')->all());
 
         /*
-         * Store files to vault
+         * If we add more files
          */
-        $files = $processFiles->initialize($request->file('files'), $vault)->processFiles();
+        if ($request->hasFile('files')) {
+            /*
+             * Store files to vault
+             */
+            $files = $processFiles->initialize($request->file('files'), $vault)->processFiles();
 
-        /*
-         * Add all the documents to the vault and the owner
-         */
-        foreach ($files as $file) {
-            $file->vault()->associate($vault);
-            $file->owner()->associate($request->user());
-            $file->save();
+            /*
+             * Add all the documents to the vault and the owner
+             */
+            foreach ($files as $file) {
+                $file->vault()->associate($vault);
+                $file->owner()->associate($request->user());
+                $file->save();
+            }
         }
 
         /*
