@@ -68,9 +68,7 @@ class SendAbortStatusByEmail implements ShouldQueue
 
             $message_id = $message->getHeaders()->get('Message-ID');
             $message_id->setId(time() . '.' . uniqid() . env('MAIL_USERNAME'));
-
             $headers->addTextHeader('X-Mailer', 'PHP v' . phpversion());
-            $headers->addParameterizedHeader('Content-type', 'text/html', ['charset' => 'utf-8']);
         });
     }
 }
