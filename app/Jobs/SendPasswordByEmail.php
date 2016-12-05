@@ -41,6 +41,13 @@ class SendPasswordByEmail implements ShouldQueue
         Mail::send('emails.password-reset', ['name' => $user->name, 'email' => $user->email, 'password' => $password, 'url' => url('/')], function ($message) use ($user) {
             $message->to($user->email, $user->name);
             $message->subject('Identifiants de connexion');
+
+            $swiftMessage = $message->getSwiftMessage();
+            $headers = $swiftMessage->getHeaders();
+            $headers->addIdHeader('Message-ID', time() . '.' . uniqid() . env('MAIL_USERNAME'));
+            $headers->addTextHeader('MIME-Version', '1.0');
+            $headers->addTextHeader('X-Mailer', 'PHP v' . phpversion());
+            $headers->addParameterizedHeader('Content-type', 'text/html', ['charset' => 'utf-8']);
         });
     }
 }

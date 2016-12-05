@@ -62,6 +62,13 @@ class SendAbortStatusByEmail implements ShouldQueue
         Mail::send('emails.vault-abortstatus', ['owner' => $owner, 'user' => $user, 'document' => $document, 'status' => $status, 'vault' => $vault, 'link' => $link], function ($message) use ($user) {
             $message->to($user->email, $user->name);
             $message->subject('Status de l\'annulation');
+
+            $swiftMessage = $message->getSwiftMessage();
+            $headers = $swiftMessage->getHeaders();
+            $headers->addIdHeader('Message-ID', time() . '.' . uniqid() . env('MAIL_USERNAME'));
+            $headers->addTextHeader('MIME-Version', '1.0');
+            $headers->addTextHeader('X-Mailer', 'PHP v' . phpversion());
+            $headers->addParameterizedHeader('Content-type', 'text/html', ['charset' => 'utf-8']);
         });
     }
 }

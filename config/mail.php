@@ -56,8 +56,8 @@ return [
     */
 
     'from' => [
-        'address' => 'contact@irisit.fr',
-        'name' => 'Quick Quotes',
+        'address' => env('MAIL_USERNAME'),
+        'name' => config('app.name'),
     ],
 
     /*
