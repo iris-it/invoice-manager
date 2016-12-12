@@ -53,7 +53,7 @@
                                             <tbody class="animated fadeIn">
                                             @foreach($vault->documents as $document)
                                                 <tr>
-                                                    <td class="font-w600">{{$document->name}})</td>
+                                                    <td class="font-w600">{{$document->name}}</td>
                                                     <td><a href="{{url('serve/'.$document->uuid)}}" target="_blank"> {{trans('general.show')}} </a></td>
                                                     <td>
                                                         @if($document->validation_document)

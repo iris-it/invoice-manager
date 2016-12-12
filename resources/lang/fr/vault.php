@@ -35,6 +35,7 @@ return [
     'table-validated' => 'Validé ?',
     'table-actions' => 'Actions',
     'table-download' => 'Documents',
+    'table-download-validated' => 'Documents validés',
 
     'name-field' => 'Nom du porte-document',
     'description-field' => 'Description du porte-document',

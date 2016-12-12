@@ -41,6 +41,7 @@ return [
     'abort' => 'Annuler',
     'validate' => 'Valider',
     'by' => 'par',
+    'not-available' => 'Non disponible',
 
     'mon' => 'lundi',
     'tue' => 'mardi',
