@@ -5,7 +5,7 @@
     <section class="content">
         <div class="row">
             <div class="col-xs-12">
-                <div class="box">
+                <div class="box box-primary">
 
                     {!! Form::model($user, ['method' => 'PUT','action' => ['Admin\UserController@update', $user->id], 'class'=> 'form-horizontal']) !!}
 

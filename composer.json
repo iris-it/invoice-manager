@@ -10,7 +10,8 @@
         "laravelcollective/html": "^5.3",
         "laracasts/flash": "^2.0",
         "league/climate": "^3.2",
-        "snowfire/beautymail": "dev-master"
+        "snowfire/beautymail": "dev-master",
+        "predis/predis": "^1.1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

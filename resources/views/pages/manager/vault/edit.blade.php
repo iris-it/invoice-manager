@@ -5,7 +5,7 @@
     <section class="content">
         <div class="row">
             <div class="col-xs-12">
-                <div class="box">
+                <div class="box box-primary">
 
                     {!! Form::model($vault, ['method' => 'PUT','action' => ['Manager\VaultController@update', $vault->id], 'class'=> 'form-horizontal', 'files' => true]) !!}
 
@@ -42,7 +42,7 @@
 
                                 <div class="form-group">
                                     <div class="col-md-12 col-xs-12">
-                                        <table class="table table-bordered">
+                                        <table class="table table-bordered table-striped">
                                             <thead>
                                             <tr>
                                                 <th>{{trans('vault.table-name')}}</th>

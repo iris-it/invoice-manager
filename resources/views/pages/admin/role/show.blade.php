@@ -6,7 +6,7 @@
 
         <div class="row">
             <div class="col-xs-12">
-                <div class="box">
+                <div class="box box-primary">
                     <div class="box-header">
                         <h3 class="box-title">{{$role->name}}</h3>
                     </div>
@@ -48,7 +48,7 @@
 
         <div class="row">
             <div class="col-xs-12">
-                <div class="box">
+                <div class="box box-primary">
                     <div class="box-header">
                         <h3 class="box-title">{{trans('role.show-permission-title')}}</h3>
                     </div>

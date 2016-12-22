@@ -5,7 +5,7 @@
     <section class="content">
         <div class="row">
             <div class="col-xs-12">
-                <div class="box">
+                <div class="box box-primary">
                     <div class="box-header">
                         <h3 class="box-title">{{$vault->name}}</h3>
                     </div>
@@ -41,7 +41,7 @@
 
                                 <div class="form-group">
                                     <div class="col-md-12 col-xs-12">
-                                        <table class="table table-bordered">
+                                        <table class="table table-bordered table-striped">
                                             <thead>
                                             <tr>
                                                 <th>{{trans('vault.documents-field')}}</th>

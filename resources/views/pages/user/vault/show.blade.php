@@ -5,7 +5,7 @@
     <section class="content">
         <div class="row">
             <div class="col-xs-12">
-                <div class="box">
+                <div class="box box-primary">
                     <div class="box-header">
                         <h3 class="box-title">{{$vault->name}}</h3>
                     </div>
@@ -31,7 +31,7 @@
                                 <div class="form-group">
                                     <div class="col-md-12 col-xs-12">
                                         <label>{{trans('vault.documents-field')}}</label>
-                                        <table class="table table-bordered">
+                                        <table class="table table-bordered table-striped">
                                             <thead>
                                             <tr>
                                                 <th>{{trans('vault.table-description')}}</th>
@@ -43,7 +43,7 @@
                                             <tbody class="animated fadeIn">
                                             @foreach($vault->documents as $document)
                                                 <tr>
-                                                    <td class="font-w600">{{$document->name}})</td>
+                                                    <td class="font-w600">{{$document->name}}</td>
                                                     <td><a href="{{url('serve/'.$document->uuid)}}" target="_blank"> {{trans('general.show')}} </a></td>
                                                     <td>
                                                         @if($document->validation_document)
